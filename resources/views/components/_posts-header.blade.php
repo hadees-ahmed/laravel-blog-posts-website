@@ -3,7 +3,7 @@
     <h1 class="text-4xl">
         Latest <span class="text-blue-500">Laravel From Scratch</span> Blog
     </h1>
-    <h2 class="inline-flex mt-2">{{ $user->name ? 'By ' . $user->name : 'All Posts'}} <img src="/images/lary-head.svg"/> </h2><br/>
+    <h2 class="inline-flex mt-2">{{ $user->name  ? 'By ' . $user->name : 'All Posts'}} <img src="/images/lary-head.svg"/> </h2><br/>
 
 
         <!-- Other Filters -->
@@ -28,13 +28,13 @@
 {{--            </svg>--}}
 {{--        </div>--}}
 
-        <!-- Search -->
+    <!-- Categories -->
         <div class="relative flex lg:inline-flex items-center bg-gray-100 rounded-xl px-3 py-2">
             <form method="GET" action="#">
 
                 <select name="category_id" class="flex-1  bg-transparent py-2 pl-3 pr-9 text-sm font-semibold">
 
-                    <option value="">Categories</option>
+                    <option value="">All</option>
                     @foreach($categories as $category)
                         <option value="{{$category->id}}" @if($selectedCategory && $selectedCategory->id == $category->id) selected="selected" @endif>{{$category->name}}</option>
                     @endforeach

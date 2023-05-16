@@ -17,14 +17,14 @@ class CommentFactory extends Factory
      * @return array<string, mixed>
      */
     public function definition(): array
-
     {
-        $userids = User::pluck('id')->toArray();
-        $postids = Post::pluck('id')->toArray();
+        $userId = User::inRandomOrder()->value('id');
+        $postId = Post::inRandomOrder()->value('id');
+
         return [
             'comments' => $this->faker->sentence,
-            'user_id' => $this->faker->randomElement($userids),
-            'post_id' => $this->faker->randomElement($postids)
+            'user_id' => $userId,
+            'post_id' => $postId
         ];
     }
 }

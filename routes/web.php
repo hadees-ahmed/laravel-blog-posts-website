@@ -49,7 +49,10 @@ Route::get('/update',[\App\Http\Controllers\UserController::class,'edit'])->midd
 
 Route::post('/update',[\App\Http\Controllers\UserController::class,'update'])->middleware('auth');
 Route::get('{user}/delete',[\App\Http\Controllers\UserController::class,'destroy'])->middleware('auth','isAdmin');
-Route::get('/users/{user}/comment/{post}',[\App\Http\Controllers\CommentsController::class , 'create']);
+//show comments
+Route::get('/posts/{post}/comments',[\App\Http\Controllers\CommentsController::class,'index']);
+
+Route::post('/users/{user}/{post}/comments',[\App\Http\Controllers\CommentsController::class , 'create']);
 
 
 
