@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -15,12 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::truncate();
-        Category::truncate();
-        Post::truncate();
-         \App\Models\User::factory(5)->create([
-
-         ]);
+         \App\Models\User::factory(5)->create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
@@ -29,5 +25,6 @@ class DatabaseSeeder extends Seeder
         Category::factory(30)->create();
 
         Post::factory(200)->create();
+        Comment::factory(50)->create();
     }
 }
