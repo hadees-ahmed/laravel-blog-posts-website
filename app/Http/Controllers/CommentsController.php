@@ -12,15 +12,17 @@ class CommentsController extends Controller
     public function index(Post $post)
     {
         $post->load('comments', 'user', 'category');
+        $comments = $post->comments()->with('user')->latest()->paginate(5);
 
         return view('comments.index', [
+            'comments' => $comments,
             'post' => $post
         ]);
     }
 
     public function create(User $user ,Post $post, Request $request){
         $request->validate([
-            'comment'=>'max:255|min:1'
+            'comment'=>'required|profanity|max:3000|min:1'
         ]);
         Comment::create([
             'comments' => $request->get('comment'),

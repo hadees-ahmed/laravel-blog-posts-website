@@ -45,13 +45,19 @@ Route::post('/login',[\App\Http\Controllers\SessionsController::class, 'login'])
 // to edit other users from admin login
 Route::get('{user?}/update',[\App\Http\Controllers\UserController::class,'edit'])->middleware('isAdmin','auth');
 
+// edit profile route
 Route::get('/update',[\App\Http\Controllers\UserController::class,'edit'])->middleware('auth');
 
+// save updated profile details
 Route::post('/update',[\App\Http\Controllers\UserController::class,'update'])->middleware('auth');
+
+//to delete the user from blog (admins only)
 Route::get('{user}/delete',[\App\Http\Controllers\UserController::class,'destroy'])->middleware('auth','isAdmin');
+
 //show comments
 Route::get('/posts/{post}/comments',[\App\Http\Controllers\CommentsController::class,'index']);
 
+// store comment
 Route::post('/users/{user}/{post}/comments',[\App\Http\Controllers\CommentsController::class , 'create']);
 
 

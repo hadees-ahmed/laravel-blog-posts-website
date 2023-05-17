@@ -48,15 +48,9 @@
             </div>
 
             <footer class=" mt-8">
-
-        <div class="flex justify-between  items-center mt-8">
-            <form action="/posts/{{$post->id}}/comments">
-            <input type="submit" value="View Comments {{ $post->comments_count }}" class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 rounded-full py-2 px-8">
-            </form>
-        </div>
-
-
-
+                <div class="flex justify-between  items-center mt-8">
+                    <a href="/posts/{{$post->id}}/comments" class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 rounded-full py-2 px-8">{{'View Comments (' . $post->comments_count . ')'}}</a>
+                    </div>
             </footer>
         </div>
     </div>
