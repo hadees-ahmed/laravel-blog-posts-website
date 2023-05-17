@@ -1,5 +1,6 @@
 
 @props(['posts'])
+@props(['user'])
 
 @forelse($posts as $post)
 <article
@@ -7,8 +8,7 @@
     <div class="flex justify-between items-center mt-8">
         <div class=" flex items-center text-sm">
         <img src="/images/lary-avatar.svg" alt="Blog Post illustration" class="rounded-sm" width="50" height="100">
-        <a href="/users/{{ $post->user->id }}/posts" onclick="checkURL(event, '/users/{{ $post->user->id }}/posts')"> <h1 class="font-bold">{{$post->user->name}}</h1></a>
-
+            <a href="{{route('users.posts.index',['user'=> $post->user])}}" > <h1 class="font-bold">{{$post->user->name}}</h1></a>
         </div>
     </div>
     <div class="py-6 px-5">
@@ -49,7 +49,7 @@
 
             <footer class=" mt-8">
                 <div class="flex justify-between  items-center mt-8">
-                    <a href="/posts/{{$post->id}}/comments" class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 rounded-full py-2 px-8">{{'View Comments (' . $post->comments_count . ')'}}</a>
+                    <a href="{{ route('posts.comments.index', ['post' => $post->id]) }}" class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 rounded-full py-2 px-8">{{'View Comments (' . $post->comments_count . ')'}}</a>
                     </div>
             </footer>
         </div>

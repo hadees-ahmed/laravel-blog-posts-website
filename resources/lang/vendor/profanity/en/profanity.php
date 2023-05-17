@@ -47,7 +47,6 @@ return [
     'fudgepacker',
     'flange',
     'goddamn',
-    'hell',
     'homo',
     'jizz',
     'knobend',

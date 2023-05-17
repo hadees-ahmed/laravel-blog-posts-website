@@ -10,22 +10,24 @@
 <section class="px-6 py-8">
     <nav class="md:flex md:justify-between md:items-center">
         <div>
-            <a href="/posts">
+            <a href="{{route('posts')}}">
                 <img src="/images/logo.svg" alt="Laracasts Logo" width="165" height="16">
             </a>
         </div>
 
         <div class="mt-8 md:mt-0 flex items-center">
             @guest()
-                <a href="/register" class="text-xs font-bold uppercase">Register</a>
-                <a href="/login" class="ml-3 text-xs font-bold uppercase">Login</a>
+                <a href="{{route('register')}}" class="text-xs font-bold uppercase">Register</a>
+                <a href="{{route('login')}}" class="ml-3 text-xs font-bold uppercase">Login</a>
             @else
                 @if(auth()->user()->is_Admin)
-                    <a href="/users" class="text-xs font-bold uppercase mr-6">Manage Users</a>
+                    <a href="{{route('users.index')}}" class="text-xs font-bold uppercase mr-6 text-blue-500">Manage Users</a>
 
                 @endif
-                <a href="/update" class="text-xs font-bold uppercase">{{auth()->user()->name}} </a>
-                <form method="POST" action="/logout" class="text-xs font-semibold text-blue-500 ml-6">
+
+                <a href="{{route('users.update')}}" class="text-xs font-bold uppercase mr-6 text-blue-500">{{'Profile'}} </a>
+                <h class="text-xs font-bold uppercase ">{{"Welcome back! " . auth()->user()->name}}</h>
+                <form method="POST" action="{{route('logout')}}" class="text-xs font-semibold text-blue-500 ml-6">
                     @csrf
                     <button type="submit">LogOut</button>
                 </form>
