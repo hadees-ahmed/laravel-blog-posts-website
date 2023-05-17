@@ -11,7 +11,9 @@ class PostController extends Controller
 {
     public function index(User $user = null, Request $request)
     {
-        $query = Post::with('category', 'user')->latest();
+        $query = Post::withCount('comments')
+            ->with('category', 'user')->latest();
+
         $selectedCategory = null;
         $categoryId = $request->get('category_id');
         $search = $request->get('search');
@@ -26,7 +28,7 @@ class PostController extends Controller
             $query = $query->where('category_id', $categoryId);
         }
 
-        if ($user->id != null) {
+        if ($user->id != null ) {
             $query = $query->where('user_id', $user->id);
         }
 

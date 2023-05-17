@@ -30,4 +30,7 @@ class Post extends Model
     {
         return Carbon::parse($value);
     }
+    function comments(){
+        return $this->hasMany(Comment::class,'post_id');
+    }
 }

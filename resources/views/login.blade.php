@@ -1,7 +1,7 @@
 <x-layout>
     <main class="max-w-lg mx-auto">
         <h1 class="text-center font-bold text-xl">Login!</h1>
-    <form method="POST" action="/login">
+    <form method="POST" action="{{route('login')}}">
         @csrf
         <div class="mb-6">
         <label class="block mb-2 uppercase font-bold text-xs text-gray-700" for="email">email</label>
