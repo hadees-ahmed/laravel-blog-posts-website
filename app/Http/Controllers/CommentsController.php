@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
+use App\Policies\CommentPolicy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
@@ -32,5 +34,14 @@ class CommentsController extends Controller
         ]);
 
         return redirect('/posts/'. $post->id . '/comments');
+    }
+    public function destroy(Comment $comment)
+    {
+       // $this->authorizeResource(Comment::class, 'comment');
+        $this->authorize('delete', $comment);
+
+        $comment->delete();
+
+        return redirect()->back();
     }
 }

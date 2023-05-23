@@ -25,7 +25,7 @@
 
                 @endif
 
-                <a href="{{route('users.update')}}" class="text-xs font-bold uppercase mr-6 text-blue-500">{{'Profile'}} </a>
+                <a href="{{route('users.update')}}" class="text-xs font-bold uppercase mr-6 text-blue-500">Profile</a>
                 <h class="text-xs font-bold uppercase ">{{"Welcome back! " . auth()->user()->name}}</h>
                 <form method="POST" action="{{route('logout')}}" class="text-xs font-semibold text-blue-500 ml-6">
                     @csrf
