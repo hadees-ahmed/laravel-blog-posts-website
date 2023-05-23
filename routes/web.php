@@ -89,6 +89,8 @@ Route::post('/users/{user}/{post}/comments',[\App\Http\Controllers\CommentsContr
     ->middleware('auth')
     ->name('users.comments');
 
+Route::get('/comments/{comment}/delete',[\App\Http\Controllers\CommentsController::class,'destroy'])->middleware('auth')->can('delete', 'comment')->name('comments.delete');
+
 
 
 

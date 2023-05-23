@@ -5,10 +5,14 @@
             @foreach($comments as $comment)
                 <img src="/images/lary-avatar.svg" alt="Lary avatar">
                 <a href="/users/{{$comment->user->id}}/posts"><h5 class="font-bold">{{$comment->user?->name }}</h5></a>
-                <h6 class="text-blue-500">{{$comment->comments}}</h6>
-                <span class="mt-2 block text-gray-400 text-xs">
+
+                    @can('delete', $comment)
+                        <a href="{{route('comments.delete',['comment' => $comment->id])}}" class="text-red-500">Delete Comment</a>
+                    @endcan
+                <p class="text-blue-500">{{$comment->comments}}</p>
+                <div class="mt-2 block text-gray-400 text-xs">
                     <time>{{$comment->created_at->diffForHumans()}}</time>
-                </span>
+                </div>
             @endforeach
 
             <div class="flex justify-between  items-center mt-8">

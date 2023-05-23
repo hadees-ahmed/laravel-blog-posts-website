@@ -20,6 +20,8 @@ class UserController extends Controller
     }
     public function edit(User $user = null)
     {
+
+
         return view('edit',[
             'user'=> $user
         ]);
@@ -28,7 +30,10 @@ class UserController extends Controller
     public function update(StoreUserRequest $request)
     {
         $attributes = array_filter($request->validated());
+        $user = auth()->user();
+
         if ($request->get('user_id')){
+            $this->authorize('before', $user);
             User::where('id',$request->get('user_id'))->update($attributes);
             return redirect('/users');
         } else {
