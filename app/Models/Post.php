@@ -5,11 +5,32 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
+
 class Post extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'slug', 'excerpt', 'body'];
+    protected $fillable = ['title', 'slug', 'excerpt', 'body', 'category_id'];
 // search query
+
+    public static function booted()
+    {
+        static::creating(function ($post) {
+            if (auth()->check()) {
+                $post->user_id = auth()->id();
+            }
+        });
+
+        static::saving(function ($post) {
+            $post->excerpt = $post->excerpt ?? Str::excerpt($post->body);
+
+            // if title was changed
+            if (isset($post->getDirty()['title'])) {
+                $post->slug = Str::slug($post->title . ' ' . random_int(1, 10000));
+            }
+        });
+    }
+
     public function scopeSearch($query, array $array){
         if ($array['search'] ?? false) {
             $query

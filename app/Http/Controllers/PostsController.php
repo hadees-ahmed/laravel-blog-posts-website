@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
-class PostController extends Controller
+class PostsController extends Controller
 {
     public function index(User $user = null, Request $request)
     {
@@ -35,11 +38,46 @@ class PostController extends Controller
         $posts = $query->paginate(15);
 
         return view('users.posts.index', [
-            'categories' => Category::oldest('name')->get(['id','name']),
+            'categories' => Category::all(['id','name']),
             'posts' => $posts,
             'selectedCategory' => $selectedCategory,
             'user' => $user,
         ]);
+
+    }
+
+    public function create()
+    {
+        $categories = Category::all(['id','name']);
+
+        return view('users.posts.create', compact('categories'));
+
+    }
+
+    public function edit(Post $post)
+    {
+        $categories = Category::all(['id','name']);
+
+        return view('users.posts.edit', compact('categories','post'));
+
+    }
+
+    public function store(StorePostRequest $request)
+    {
+        $attributes = $request->validated();
+
+        Post::create($attributes);
+
+        return redirect('/posts');
+    }
+
+    public function update(Post $post)
+    {
+
+        $attributes = Arr::except(\request()->all(),['_token']);
+
+        Post::where('id', $post->id )->update($attributes);
+        return redirect()->back();
 
     }
 

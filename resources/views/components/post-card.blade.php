@@ -1,6 +1,4 @@
 
-@props(['posts'])
-@props(['user'])
 
 @forelse($posts as $post)
 <article
@@ -19,12 +17,14 @@
         <div class="mt-8 flex flex-col justify-between">
             <header>
                 <div class="space-x-2">
-                    <a href="#"
+                    <a href="?category_id={{$post->category->id}}"
                        class="px-3 py-1 border border-blue-300 rounded-full text-blue-300 text-xs uppercase font-semibold"
                        style="font-size: 10px">{{$post->category->name}}</a>
-{{--                    <a href="#"--}}
-{{--                       class="px-3 py-1 border border-red-300 rounded-full text-red-300 text-xs uppercase font-semibold"--}}
-{{--                       style="font-size: 10px">Updates</a>--}}
+                    @if($user->id || $post->user_id == auth()->user()->id)
+                        <a href="{{route('posts.edit',['post' => $post->id])}}"
+                           class="px-3 py-1 border border-red-300 rounded-full text-red-300 text-xs uppercase font-semibold"
+                           style="font-size: 10px">Edit</a>
+                    @endif
                 </div>
 
 
@@ -32,7 +32,7 @@
                     <h1 class="text-3xl">
                         {{$post->title}}</h1>
                     <span class="mt-2 block text-gray-400 text-xs">
-                                        Published <time>{{$post->published_at->diffForHumans()}}</time>
+                                        Published <time>{{$post->created_at->diffForHumans()}}</time>
                     </span>
                 </div>
             </header>
