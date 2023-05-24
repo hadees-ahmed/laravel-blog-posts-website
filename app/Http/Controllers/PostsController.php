@@ -77,7 +77,7 @@ class PostsController extends Controller
         $attributes = Arr::except(\request()->all(),['_token']);
 
         Post::where('id', $post->id )->update($attributes);
-        return redirect()->back();
+        return redirect('/posts');
 
     }
 

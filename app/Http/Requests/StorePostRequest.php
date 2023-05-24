@@ -22,9 +22,9 @@ class StorePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|min:3',
-            'body' => 'required|min:20',
-            'excerpt' => 'nullable|min:5',
+            'title' => 'required|profanity|min:3',
+            'body' => 'required|profanity|min:20',
+            'excerpt' => 'nullable|profanity|min:5',
             'category_id' =>'required|exists:categories,id'
         ];
     }

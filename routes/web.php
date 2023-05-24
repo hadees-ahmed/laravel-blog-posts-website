@@ -93,14 +93,23 @@ Route::post('users/{user}/{post}/comments',[CommentsController::class , 'create'
     ->middleware('auth')
     ->name('users.comments');
 
-Route::get('comments/{comment}/delete',[CommentsController::class,'destroy'])->middleware('auth')->can('delete', 'comment')->name('comments.delete');
+Route::get('comments/{comment}/delete',[CommentsController::class,'destroy'])
+    ->middleware('auth')
+    ->can('delete', 'comment')
+    ->name('comments.delete');
 
 Route::get('posts/create',[PostsController::class,'create'])->middleware('auth')->name('posts.create');
 
-Route::get('posts/{post}/edit',[PostsController::class,'edit'])->middleware('auth')->name('posts.edit');
+Route::get('posts/{post}/edit',[PostsController::class,'edit'])
+    ->middleware('auth')
+    ->can('update', 'post')
+    ->name('posts.edit');
 
 Route::post('posts',[PostsController::class,'store'])->middleware('auth')->name('posts.store');
-Route::post('posts/{post}',[PostsController::class, 'update'])->middleware('auth')->name('posts.update');
+Route::post('posts/{post}',[PostsController::class, 'update'])
+    ->middleware('auth')
+    ->name('posts.update')
+    ->can('update', 'post');
 
 
 
