@@ -47,4 +47,7 @@
                 <input type="submit" value="submit">
             </form>
         </div>
+    <br><a href="{{route('posts.create')}}" class="text-blue-500">Create a New Post</a><br>
+    <a href="{{route('users.posts.index',['user' => auth()->user()->id])}}" class="text-blue-500">View Your Posts</a>
+
 </header>

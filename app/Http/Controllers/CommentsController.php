@@ -37,8 +37,10 @@ class CommentsController extends Controller
     }
     public function destroy(Comment $comment)
     {
+
+        //both statements are used to call policy
        // $this->authorizeResource(Comment::class, 'comment');
-        $this->authorize('delete', $comment);
+        //$this->authorize('delete', $comment);
 
         $comment->delete();
 
