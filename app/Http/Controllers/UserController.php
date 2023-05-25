@@ -51,10 +51,12 @@ class UserController extends Controller
             return redirect('/posts');
         }
     }
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        User::where('id',$id)->delete();
-        Post::where('user_id', $id)->delete();
+        $user->posts()->delete();
+
+        $user->delete();
+
         return redirect('users');
     }
 }

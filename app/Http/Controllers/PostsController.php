@@ -64,21 +64,22 @@ class PostsController extends Controller
 
     public function store(StorePostRequest $request)
     {
-        $attributes = $request->validated();
-
-        Post::create($attributes);
+        Post::create($request->validated());
 
         return redirect('/posts');
     }
 
-    public function update(Post $post)
+    public function update(Post $post, StorePostRequest $request)
     {
+        $post->update($request->validated());
 
-        $attributes = Arr::except(\request()->all(),['_token']);
-
-        Post::where('id', $post->id )->update($attributes);
         return redirect('/posts');
+    }
 
+    public function delete(Post $post)
+    {
+        $post->delete();
+        return redirect('/posts');
     }
 
 }

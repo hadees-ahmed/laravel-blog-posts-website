@@ -31,7 +31,8 @@ class Post extends Model
         });
     }
 
-    public function scopeSearch($query, array $array){
+    public function scopeSearch($query, array $array)
+    {
         if ($array['search'] ?? false) {
             $query
                 ->where('title', 'like', '%' . $array['search'] . '%')
@@ -43,7 +44,8 @@ class Post extends Model
     {
         return $this->belongsTo(Category::class);// if I of id will be small then do not need to specify foreignKey It will auto render
     }
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
     //@todo learn
@@ -54,4 +56,5 @@ class Post extends Model
     function comments(){
         return $this->hasMany(Comment::class,'post_id');
     }
+
 }

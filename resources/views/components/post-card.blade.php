@@ -3,10 +3,17 @@
 @forelse($posts as $post)
 <article
     class="transition-colors duration-300 hover:bg-gray-100 border border-black border-opacity-0 hover:border-opacity-5 rounded-xl">
+
     <div class="flex justify-between items-center mt-8">
         <div class=" flex items-center text-sm">
         <img src="/images/lary-avatar.svg" alt="Blog Post illustration" class="rounded-sm" width="50" height="100">
             <a href="{{route('users.posts.index',['user'=> $post->user])}}" > <h1 class="font-bold">{{$post->user->name}}</h1></a>
+        </div>
+
+        <div class="flex justify-between  items-center mt-0 mr-5">
+            @if($post->user_id == auth()->user()->id || auth()->user()->is_Admin)
+                <a href="{{route('posts.delete',['post' => $post->id])}}" target="_blank" style="color: orangered">Delete Post</a>
+            @endif
         </div>
     </div>
     <div class="py-6 px-5">
@@ -50,7 +57,9 @@
             <footer class=" mt-8">
                 <div class="flex justify-between  items-center mt-8">
                     <a href="{{ route('posts.comments.index', ['post' => $post->id]) }}" class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 rounded-full py-2 px-8">{{'View Comments (' . $post->comments_count . ')'}}</a>
-                    </div>
+{{--                    <a href="https://example.com" target="_blank" style="color: orangered">Delete Post</a>--}}
+
+                </div>
             </footer>
         </div>
     </div>
