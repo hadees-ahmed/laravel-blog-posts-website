@@ -2,7 +2,7 @@
 
 @forelse($posts as $post)
 <article
-    class="transition-colors duration-300 hover:bg-gray-100 border border-black border-opacity-0 hover:border-opacity-5 rounded-xl">
+    class="transition-colors duration-300 hover:bg-gray-100 border border-black border-opacity-0 hover:border-opacity-5 rounded-xl mt-5">
 
     <div class="flex justify-between items-center mt-8">
         <div class=" flex items-center text-sm">
@@ -11,9 +11,9 @@
         </div>
 
         <div class="flex justify-between  items-center mt-0 mr-5">
-            @if($post->user_id == auth()->user()->id || auth()->user()->is_Admin)
-                <a href="{{route('posts.delete',['post' => $post->id])}}" target="_blank" style="color: orangered">Delete Post</a>
-            @endif
+            @can('delete', $post)
+                <a href="{{route('posts.delete',['post' => $post->id])}}" target="_blank" style="color: orangered">{{ $post->published_at ? "Delete Post" : "Delete Draft" }}</a>
+            @endcan
         </div>
     </div>
     <div class="py-6 px-5">
@@ -39,7 +39,9 @@
                     <h1 class="text-3xl">
                         {{$post->title}}</h1>
                     <span class="mt-2 block text-gray-400 text-xs">
-                                        Published <time>{{$post->created_at->diffForHumans()}}</time>
+                        @if($post->published_at)
+                            Published <time>{{$post->published_at->diffForHumans()}}</time>
+                        @endif
                     </span>
                 </div>
             </header>
@@ -56,16 +58,17 @@
 
             <footer class=" mt-8">
                 <div class="flex justify-between  items-center mt-8">
+                    @if($post->published_at)
                     <a href="{{ route('posts.comments.index', ['post' => $post->id]) }}" class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 rounded-full py-2 px-8">{{'View Comments (' . $post->comments_count . ')'}}</a>
 {{--                    <a href="https://example.com" target="_blank" style="color: orangered">Delete Post</a>--}}
-
+                    @endif
                 </div>
             </footer>
         </div>
     </div>
 </article>
 @empty
-    {{'User has not published any posts for this category yet'}}
+    {{'You do not has any posts for selected property'}}
 @endforelse
 {{ $posts->links() }}
 

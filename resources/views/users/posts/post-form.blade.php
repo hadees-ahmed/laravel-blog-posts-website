@@ -32,5 +32,5 @@
         <p class="text-red-500 text-xs mt-1">{{$message}}</p>
     @enderror
 
-    <input class="border border-gray-400 p-2 w-full" type="submit" value="Submit">
+    <input class="border border-gray-400 p-2 w-full" name="submit" type="submit" value="Publish">
 </div>

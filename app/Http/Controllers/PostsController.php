@@ -15,14 +15,16 @@ class PostsController extends Controller
     public function index(User $user = null, Request $request)
     {
         $query = Post::withCount('comments')
-            ->with('category', 'user')->latest();
+            ->with('category', 'user')
+            ->published()
+            ->latest();
 
         $selectedCategory = null;
         $categoryId = $request->get('category_id');
         $search = $request->get('search');
 
         if ($search ) {
-            // $query = $query->where('title', 'like', '%' . request('search') . '%');
+             //$query = $query->where('title', 'like', '%' . request('search') . '%');
             $query = $query->search([$search]);
         }
 
@@ -64,14 +66,24 @@ class PostsController extends Controller
 
     public function store(StorePostRequest $request)
     {
-        Post::create($request->validated());
+        $attributes = $request->validated();
+
+        if ($request->submit === 'Publish') {
+            $attributes['published_at'] = now();
+        }
+
+        Post::create($attributes);
 
         return redirect('/posts');
     }
 
     public function update(Post $post, StorePostRequest $request)
     {
-        $post->update($request->validated());
+       $attributes =  $request->validated();
+
+       $attributes['published_at'] = now();
+
+        $post->update($attributes);
 
         return redirect('/posts');
     }
@@ -79,7 +91,8 @@ class PostsController extends Controller
     public function delete(Post $post)
     {
         $post->delete();
-        return redirect('/posts');
+
+        return redirect()->back();
     }
 
 }

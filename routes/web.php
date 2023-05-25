@@ -114,6 +114,9 @@ Route::post('posts/{post}',[PostsController::class, 'update'])
 //delete post
 Route::get('posts/{post}/delete',[PostsController::class,'delete'])->middleware('auth')
     ->name('posts.delete')->can('delete', 'post');
+Route::get('users/drafts',[\App\Http\Controllers\PostsDraftsController::class, 'index'])
+    ->middleware('auth')
+    ->name('users.drafts');
 
 
 
