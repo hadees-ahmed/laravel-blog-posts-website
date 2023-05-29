@@ -25,7 +25,8 @@ class StorePostRequest extends FormRequest
             'title' => 'required|profanity|min:3',
             'body' => 'required|profanity|min:20',
             'excerpt' => 'nullable|profanity|min:5',
-            'category_id' =>'required|exists:categories,id'
+            'category_id' =>'required|exists:categories,id',
+            'submit' =>'required'
         ];
     }
 }

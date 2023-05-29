@@ -12,7 +12,7 @@
 
         <div class="flex justify-between  items-center mt-0 mr-5">
             @can('delete', $post)
-                <a href="{{route('posts.delete',['post' => $post->id])}}" target="_blank" style="color: orangered">{{ $post->published_at ? "Delete Post" : "Delete Draft" }}</a>
+                <a href="{{route('posts.delete',['post' => $post->id])}}" style="color: orangered">{{ $post->published_at ? "Delete Post" : "Delete Draft" }}</a>
             @endcan
         </div>
     </div>
@@ -68,7 +68,7 @@
     </div>
 </article>
 @empty
-    {{'You do not has any posts for selected property'}}
+    {{'You do not has any posts in this section'}}
 @endforelse
 {{ $posts->links() }}
 

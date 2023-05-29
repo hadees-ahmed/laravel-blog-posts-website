@@ -5,7 +5,6 @@
 
             <form method="POST" action="{{route('posts.store')}}">
                 @include('users.posts.post-form')
-                <br><input class="border border-gray-400 p-2 w-full" type="submit" name="submit" value="Save As Draft">
             </form>
         </main>
     </section>

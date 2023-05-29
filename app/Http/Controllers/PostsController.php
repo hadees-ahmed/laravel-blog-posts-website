@@ -61,31 +61,16 @@ class PostsController extends Controller
         $categories = Category::all(['id','name']);
 
         return view('users.posts.edit', compact('categories','post'));
-
     }
 
     public function store(StorePostRequest $request)
     {
-        $attributes = $request->validated();
-
-        if ($request->submit === 'Publish') {
-            $attributes['published_at'] = now();
-        }
-
-        Post::create($attributes);
-
-        return redirect('/posts');
+       return $this->save($request->validated(), new Post());
     }
 
     public function update(Post $post, StorePostRequest $request)
     {
-       $attributes =  $request->validated();
-
-       $attributes['published_at'] = now();
-
-        $post->update($attributes);
-
-        return redirect('/posts');
+        return $this->save($request->validated(), $post);
     }
 
     public function delete(Post $post)
@@ -95,4 +80,20 @@ class PostsController extends Controller
         return redirect()->back();
     }
 
+    private function save(array $attributes, Post $post)
+    {
+        // condition to check the user if user edit the post
+        // and save as draft
+        if ($attributes['submit'] === 'Save As Draft') {
+            $attributes['published_at'] = null;
+        } else {
+            $attributes['published_at'] = now();
+        }
+
+        $post->fill($attributes)->save();
+
+        return $attributes['submit'] === 'Save As Draft'
+            ? redirect('/users/drafts')
+            : redirect('/posts');
+    }
 }

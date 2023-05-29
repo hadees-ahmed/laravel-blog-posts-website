@@ -15,7 +15,7 @@
                 </div>
             @endforeach
 
-                @empty($comments)
+                @empty($comment->comments)
                 {{"Want to be first commenter? then type your comment below"}}
                 @endempty
 
