@@ -83,37 +83,54 @@ Route::get('{user}/delete',[UserController::class,'destroy'])
     ->middleware('auth','isAdmin')
     ->name('users.delete');
 
-//show comments
+//show comments and add comment
 Route::get('posts/{post}/comments',[CommentsController::class,'index'])
     ->middleware('auth')
-    ->name('posts.comments.index');//done
+    ->name('posts.comments.index');
 
 // store comment
-Route::post('users/{user}/{post}/comments',[CommentsController::class , 'create'])
+Route::post('users/{user}/{post}/comments',[CommentsController::class , 'store'])
     ->middleware('auth')
     ->name('users.comments');
 
+// delete comment
 Route::get('comments/{comment}/delete',[CommentsController::class,'destroy'])
     ->middleware('auth')
     ->can('delete', 'comment')
     ->name('comments.delete');
 
-Route::get('posts/create',[PostsController::class,'create'])->middleware('auth')->name('posts.create');
+//create post
+Route::get('posts/create',[PostsController::class,'create'])
+    ->middleware('auth')
+    ->name('posts.create');
 
+//edit post
 Route::get('posts/{post}/edit',[PostsController::class,'edit'])
     ->middleware('auth')
     ->can('update', 'post')
     ->name('posts.edit');
 
-Route::post('posts',[PostsController::class,'store'])->middleware('auth')->name('posts.store');
+//Store created post
+Route::post('posts',[PostsController::class,'store'])
+    ->middleware('auth')
+    ->name('posts.store');
+
+//update edited post
 Route::post('posts/{post}',[PostsController::class, 'update'])
     ->middleware('auth')
     ->name('posts.update')
     ->can('update', 'post');
 
 //delete post
-Route::get('posts/{post}/delete',[PostsController::class,'delete'])->middleware('auth')
-    ->name('posts.delete')->can('delete', 'post');
+Route::get('posts/{post}/delete',[PostsController::class,'delete'])
+    ->middleware('auth')
+    ->name('posts.delete')
+    ->can('delete', 'post');
+
+// view drafts
+Route::get('users/drafts',[\App\Http\Controllers\PostsDraftsController::class, 'index'])
+    ->middleware('auth')
+    ->name('users.drafts');
 
 
 

@@ -15,6 +15,10 @@
                 </div>
             @endforeach
 
+                @empty($comment->comments)
+                {{"Want to be first commenter? then type your comment below"}}
+                @endempty
+
             <div class="flex justify-between  items-center mt-8">
                 <form method="POST" action="{{route('users.comments',['user' => auth()->user()->id, 'post' => $post->id])}}" class="flex items-center ">
                     @csrf
@@ -27,6 +31,7 @@
             </div>
         </div>
     </div>
+
     <div class="mt-4">
         {{ $comments->links() }}
     </div>

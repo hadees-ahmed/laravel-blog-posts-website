@@ -21,7 +21,7 @@ class CommentsController extends Controller
         ]);
     }
 
-    public function create(User $user ,Post $post, Request $request)
+    public function store(User $user , Post $post, Request $request)
     {
         $request->validate([
             'comment' => 'required|profanity|max:3000|min:1'

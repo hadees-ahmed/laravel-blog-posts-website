@@ -3,7 +3,7 @@
     <h1 class="text-4xl">
         Latest <span class="text-blue-500">Laravel From Scratch</span> Blog
     </h1>
-    <h2 class="inline-flex mt-2">{{ $user->name  ? 'By ' . $user->name : 'All Posts'}} <img src="/images/lary-head.svg"/> </h2><br/>
+    <h2 class="inline-flex mt-2">{{ isset($user->name)  ? 'By ' . $user->name : 'All Posts' }} <img src="/images/lary-head.svg"/> </h2><br/>
 
 
         <!-- Other Filters -->
@@ -36,7 +36,7 @@
 
                     <option value="">All</option>
                     @foreach($categories as $category)
-                        <option value="{{$category->id}}" @if($selectedCategory && $selectedCategory->id == $category->id) selected="selected" @endif>{{$category->name}}</option>
+                        <option value="{{$category->id}}" @if(isset($selectedCategory) && $selectedCategory->id == $category->id) selected="selected" @endif>{{$category->name}}</option>
                     @endforeach
                 </select>
 
@@ -49,5 +49,7 @@
         </div>
     <br><a href="{{route('posts.create')}}" class="text-blue-500">Create a New Post</a><br>
     <a href="{{route('users.posts.index',['user' => auth()->user()->id])}}" class="text-blue-500">View Your Posts</a>
+    <br><a href="{{route('users.drafts')}}" class="text-red-500">Drafts</a>
+
 
 </header>

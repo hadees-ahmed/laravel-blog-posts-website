@@ -15,14 +15,16 @@ class PostsController extends Controller
     public function index(User $user = null, Request $request)
     {
         $query = Post::withCount('comments')
-            ->with('category', 'user')->latest();
+            ->with('category', 'user')
+            ->published()
+            ->latest();
 
         $selectedCategory = null;
         $categoryId = $request->get('category_id');
         $search = $request->get('search');
 
         if ($search ) {
-            // $query = $query->where('title', 'like', '%' . request('search') . '%');
+             //$query = $query->where('title', 'like', '%' . request('search') . '%');
             $query = $query->search([$search]);
         }
 
@@ -59,27 +61,39 @@ class PostsController extends Controller
         $categories = Category::all(['id','name']);
 
         return view('users.posts.edit', compact('categories','post'));
-
     }
 
     public function store(StorePostRequest $request)
     {
-        Post::create($request->validated());
-
-        return redirect('/posts');
+       return $this->save($request->validated(), new Post());
     }
 
     public function update(Post $post, StorePostRequest $request)
     {
-        $post->update($request->validated());
-
-        return redirect('/posts');
+        return $this->save($request->validated(), $post);
     }
 
     public function delete(Post $post)
     {
         $post->delete();
-        return redirect('/posts');
+
+        return redirect()->back();
     }
 
+    private function save(array $attributes, Post $post)
+    {
+        // condition to check the user if user edit the post
+        // and save as draft
+        if ($attributes['submit'] === 'Save As Draft') {
+            $attributes['published_at'] = null;
+        } else {
+            $attributes['published_at'] = now();
+        }
+
+        $post->fill($attributes)->save();
+
+        return $attributes['submit'] === 'Save As Draft'
+            ? redirect('/users/drafts')
+            : redirect('/posts');
+    }
 }
