@@ -132,6 +132,9 @@ Route::get('users/drafts',[\App\Http\Controllers\PostsDraftsController::class, '
     ->middleware('auth')
     ->name('users.drafts');
 
+Route::get('/',[\App\Http\Controllers\MailController::class,'sendMail']);
+
+
 
 
 
