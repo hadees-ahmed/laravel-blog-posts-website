@@ -22,10 +22,13 @@
             <div class="flex justify-between  items-center mt-8">
                 <form method="POST" action="{{route('users.comments',['user' => auth()->user()->id, 'post' => $post->id])}}" class="flex items-center ">
                     @csrf
-                    <textarea class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 full py-1 px-2" name="comment" placeholder="Type Comment..."  required>{{old('comment')}}</textarea>
+                    <textarea class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 full py-1 px-2" name="comments" placeholder="Type Comment..."  required>{{old('comment')}}</textarea>
+
                     @error('comment')
                         <p class="text-red-500 text-xs mt-1">{{"Abusive language is not allowed please remove inappropriate words "}}</p>
                     @enderror
+                    <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
+                    <input type="hidden" name="post_id" value="{{$post->id}}">
                     <input type="submit" value="POST" class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 full py-2 px-8 ml-8">
                 </form>
             </div>
