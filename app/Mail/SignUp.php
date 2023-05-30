@@ -30,7 +30,7 @@ class SignUp extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('hadeesahmed@yahoo.com', 'Hadees Ahmed'),
+            from: new Address('hadees786@yahoo.com', 'Hadees Ahmed'),
             subject: 'Registration Successful',
         );
     }
