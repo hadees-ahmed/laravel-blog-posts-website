@@ -22,20 +22,24 @@ class StoreUserRequest extends FormRequest
      */
     public function rules(): array
     {
+        // when user edit details
         if ($this->request->get('user_id') == null) {
             return [
                 'name' => 'required',
                 'email' => ['required', 'email', 'max:150', Rule::unique('users')->ignore(auth()->user()->id)],
                 'current_password' => 'nullable|required_with:password|current_password:web',
-                'password' => 'nullable|required_with:current_password|min:7'
+                'password' => 'nullable|required_with:current_password|min:7',
+                'avatar' => 'image'
+
             ];
+            // when admin edit details
         } else {
             return[
             'name' => 'nullable|max:100',
-            'email' => 'nullable|email|max:150', Rule::unique('users')->ignore($this->request->get('user_id')),
-            'password'=>'nullable|max:50|min:3'
-                ];
-
+            'email' => ['nullable','email', 'max:150', Rule::unique('users')->ignore($this->request->get('user_id'))],
+            'password'=>'nullable|max:50|min:3',
+                'avatar' => 'image'
+            ];
         }
 
     }

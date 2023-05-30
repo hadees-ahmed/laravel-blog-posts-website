@@ -90,6 +90,10 @@ class PostsController extends Controller
             $attributes['published_at'] = now();
         }
 
+        if (isset($attributes['thumbnail'])){
+            $attributes['thumbnail'] = \request()->file('thumbnail')->store('thumbnails');
+        }
+
         $post->fill($attributes)->save();
 
         return $attributes['submit'] === 'Save As Draft'

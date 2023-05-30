@@ -49,7 +49,16 @@
         @error('user_id')
         <p class="text-red-500 text-xs mt-1">{{$message}}</p>
         @enderror
-
     @endif
-    <br><input class="border border-gray-400 p-2 w-full" type="submit" value="Submit">
+
+    @if(!isset($user))
+    <label class="block mb-2 uppercase font-bold text-xs text-gray-700"
+           for="profile">
+        Profile Picture (optional)
+    </label>
+
+    <input class="border border-gray-400 p-2 w-full" type="file" name="avatar">
+    @endif
+
+    <br><br><input class="border border-gray-400 p-2 w-full" type="submit" value="Submit">
 </div>

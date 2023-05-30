@@ -3,9 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Http\Requests\StoreRegistrationRequest;
+use http\Env\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 
 class
@@ -22,7 +25,8 @@ User extends Authenticatable
         'name',
         'email',
         'password',
-        'username'
+        'username',
+        'avatar',
     ];
 
     public function posts(){
@@ -50,4 +54,13 @@ User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getAvatar()
+    {
+        if ($this->avatar){
+            return Storage::url($this->avatar);
+        } else {
+            return asset('/images/lary-avatar.svg');
+        }
+    }
 }

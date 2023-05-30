@@ -30,6 +30,13 @@ class UserController extends Controller
     public function update(StoreUserRequest $request)
     {
         $attributes = array_filter($request->validated());
+
+        isset($attributes['avatar'])
+            ?
+            $attributes['avatar'] = $request->file('avatar')->store('avatars')
+            :
+            null;
+
         $user = auth()->user();
 
         if ($request->get('user_id')){

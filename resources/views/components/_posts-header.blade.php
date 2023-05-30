@@ -3,7 +3,7 @@
     <h1 class="text-4xl">
         Latest <span class="text-blue-500">Laravel From Scratch</span> Blog
     </h1>
-    <h2 class="inline-flex mt-2">{{ isset($user->name)  ? 'By ' . $user->name : 'All Posts' }} <img src="/images/lary-head.svg"/> </h2><br/>
+    <h2 class="inline-flex mt-2">{{ isset($user->name)  ? 'By ' . $user->name : 'All Posts' }} <img src="{{$user->getAvatar()}}" width="33" length="20" class="px-1"/> </h2><br/>
 
 
         <!-- Other Filters -->

@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StorePostRequest extends FormRequest
+class StoreRegistrationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +23,10 @@ class StorePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|profanity|min:3',
-            'body' => 'required|profanity|min:20',
-            'excerpt' => 'nullable|profanity|min:5',
-            'category_id' =>'required|exists:categories,id',
-            'submit' =>'required',
-            'thumbnail' =>'image'
+            'name' => 'required|max:100',
+            'email' => 'required|email|max:150|unique:users,email',
+            'password' => 'required|max:50|min:3',
+            'avatar' => 'image'
         ];
     }
 }

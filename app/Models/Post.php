@@ -11,7 +11,7 @@ use function Composer\Autoload\includeFile;
 class Post extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'slug', 'excerpt', 'body', 'category_id', 'published_at'];
+    protected $fillable = ['title', 'slug', 'excerpt', 'body', 'category_id', 'published_at', 'thumbnail'];
 // search query
 
     public static function booted()
