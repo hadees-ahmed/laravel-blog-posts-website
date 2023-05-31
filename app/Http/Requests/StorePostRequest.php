@@ -22,7 +22,7 @@ class StorePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|profanity|min:3',
+            'title' => 'required|profanity|min:3|max:150',
             'body' => 'required|profanity|min:20',
             'excerpt' => 'nullable|profanity|min:5',
             'category_id' =>'required|exists:categories,id',

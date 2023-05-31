@@ -28,10 +28,16 @@ class StoreUserRequest extends FormRequest
                     'nullable',
                     'email',
                     'max:150',
-                    $this->request->get('user_id') == null ? Rule::unique('users')->ignore(auth()->user()->id) : Rule::unique('users')->ignore($this->request->get('user_id'))
+                    $this->request->get('user_id') == null
+                        ? Rule::unique('users')->ignore(auth()->user()->id)
+                        : Rule::unique('users')->ignore($this->request->get('user_id'))
                 ],
-                'current_password' => $this->request->get('user_id') == null ? 'nullable|required_with:password|current_password:web' : '',
-                'password' => $this->request->get('user_id') == null ? 'nullable|required_with:current_password|min:7' : 'nullable|max:50|min:3',
+                'current_password' => $this->request->get('user_id') == null
+                    ? 'nullable|required_with:password|current_password:web'
+                    : '',
+                'password' => $this->request->get('user_id') == null
+                    ? 'nullable|required_with:current_password|min:7'
+                    : 'nullable|max:50|min:3',
                 'avatar' => 'image|nullable|mimes:jpeg,png|max:3096'
             ];
     }

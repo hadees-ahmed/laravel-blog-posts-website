@@ -8,10 +8,7 @@
         class="border border-gray-400 p-2 w-full"
         type="text"
         name="title"
-        value="{{old('title',
-                isset($post)
-                ? $post->title
-                : 'fake data fake data fake data fake data' )}}"
+        value="{{old('title', $post->title ?? 'fake data fake data fake data fake data')}}"
     >
     @error('title')
     <p class="text-red-500 text-xs mt-1">{{$message}}</p>

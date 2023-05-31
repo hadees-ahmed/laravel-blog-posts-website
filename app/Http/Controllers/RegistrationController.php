@@ -18,8 +18,7 @@ class RegistrationController extends Controller
 
     public function store(StoreRegistrationRequest $request)
     {
-        $attributes = $request->validated();
-
+        /* alternative way */
 //            DB::table('users')->insert(
 //                [
 //                    'username' => $request->get('username'),
@@ -28,7 +27,7 @@ class RegistrationController extends Controller
 //                    'created_at' => now()
 //                ]
 //            );
-        $user =  User::create($attributes);
+        $user =  User::create($request->validated());
         //is used to send welcome message to the user that is created
         //also queued the action for better user experience.
         Mail::to($user->email)->send(new SignUp($user));

@@ -58,7 +58,7 @@
     </label>
 
     <input class="border border-gray-400 p-2 w-full" type="file" name="avatar">
-        @error('thumbnail')
+        @error('avatar')
         <p class="text-red-500 text-xs mt-1">{{$message}}</p>
         @enderror
     @endif
