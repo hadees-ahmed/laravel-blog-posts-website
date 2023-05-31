@@ -7,14 +7,6 @@
     <div class="flex justify-between items-center mt-8">
         <div class=" flex items-center text-sm">
         <img src="{{$post->user->getAvatar()}}"
-
-
-{{--                 @if(!$post->user->avatar)--}}
-{{--                    "/images/lary-avatar.svg"--}}
-{{--                @else--}}
-{{--                   "{{ Storage::url($post->user->avatar) }}"--}}
-{{--                "/storage/{{ $post->user->avatar }}"--}}
-{{--               @endif--}}
             alt="Blog Post illustration" class="rounded-sm" width="50" height="100">
             <a href="{{route('users.posts.index',['user'=> $post->user])}}" > <h1 class="font-bold">{{$post->user->name}}</h1></a>
         </div>
@@ -27,11 +19,7 @@
     </div>
     <div class="py-6 px-5">
         <div>
-            <img src=@if(!isset($post->thumbnail))
-                     "/images/illustration-3.png"
-                 @else
-                     "/storage/{{$post->thumbnail}}"
-                  @endif
+            <img src="{{$post->getThumbnail()}}"
                  alt="Blog Post illustration" class="rounded-xl" width="400" height="300">
         </div>
 

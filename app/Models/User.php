@@ -57,7 +57,7 @@ User extends Authenticatable
             to the database to display the avatar where
             required
              */
-            if (isset($user->avatar)) {
+            if (\request()->hasFile('avatar')) {
                 $user->avatar = request()->file('avatar')->store('avatars');
             }
         });

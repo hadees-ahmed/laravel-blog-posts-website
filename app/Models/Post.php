@@ -36,6 +36,7 @@ class Post extends Model
                 to the database to display the thumbnail along
                 the posts where required
              */
+
             if (request()->hasFile('thumbnail')) {
                 $post->thumbnail = request()->file('thumbnail')->store('thumbnails');
             }
@@ -63,6 +64,15 @@ class Post extends Model
     public function scopePublished($query)
     {
         $query-> whereNotNull('published_at');
+    }
+    public function getThumbnail()
+    {
+        if ($this->thumbnail){
+            return Storage::url($this->thumbnail);
+        } else {
+            return asset('/images/illustration-3.png');
+        }
+
     }
 
     public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo

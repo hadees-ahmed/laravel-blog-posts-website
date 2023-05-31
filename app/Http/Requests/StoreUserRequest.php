@@ -22,25 +22,17 @@ class StoreUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        // when user edit details
-        if ($this->request->get('user_id') == null) {
             return [
-                'name' => 'required',
-                'email' => ['required', 'email', 'max:150', Rule::unique('users')->ignore(auth()->user()->id)],
-                'current_password' => 'nullable|required_with:password|current_password:web',
-                'password' => 'nullable|required_with:current_password|min:7',
-                'avatar' => 'image'
-
+                'name' => 'nullable|max:100',
+                'email' => [
+                    'nullable',
+                    'email',
+                    'max:150',
+                    $this->request->get('user_id') == null ? Rule::unique('users')->ignore(auth()->user()->id) : Rule::unique('users')->ignore($this->request->get('user_id'))
+                ],
+                'current_password' => $this->request->get('user_id') == null ? 'nullable|required_with:password|current_password:web' : '',
+                'password' => $this->request->get('user_id') == null ? 'nullable|required_with:current_password|min:7' : 'nullable|max:50|min:3',
+                'avatar' => 'image|nullable|mimes:jpeg,png|max:3096'
             ];
-            // when admin edit details
-        } else {
-            return[
-            'name' => 'nullable|max:100',
-            'email' => ['nullable','email', 'max:150', Rule::unique('users')->ignore($this->request->get('user_id'))],
-            'password'=>'nullable|max:50|min:3',
-                'avatar' => 'image'
-            ];
-        }
-
     }
 }
