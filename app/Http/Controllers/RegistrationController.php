@@ -19,13 +19,6 @@ class RegistrationController extends Controller
     public function store(StoreRegistrationRequest $request)
     {
         $attributes = $request->validated();
-        isset($attributes['avatar'])
-            ?
-            $attributes['avatar'] = $request->file('avatar')
-                                    ->store('avatars')
-            :
-            null;
-
 
 //            DB::table('users')->insert(
 //                [

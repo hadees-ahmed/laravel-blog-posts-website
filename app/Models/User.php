@@ -29,9 +29,6 @@ User extends Authenticatable
         'avatar',
     ];
 
-    public function posts(){
-        return $this->hasMany(Post::class);
-    }
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -42,10 +39,6 @@ User extends Authenticatable
         'remember_token',
     ];
 
-    public function setPasswordAttribute($password){
-         $this->attributes['password'] = bcrypt($password);
-    }
-
     /**
      * The attributes that should be cast.
      *
@@ -55,6 +48,25 @@ User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public static function booted()
+    {
+        static::saving(function ($user){
+            /**
+            This condition is used to
+            store the user avatar and save its path
+            to the database to display the avatar where
+            required
+             */
+            if (isset($user->avatar)) {
+                $user->avatar = request()->file('avatar')->store('avatars');
+            }
+        });
+    }
+
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = bcrypt($password);
+    }
     public function getAvatar()
     {
         if ($this->avatar){
@@ -62,5 +74,10 @@ User extends Authenticatable
         } else {
             return asset('/images/lary-avatar.svg');
         }
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 }

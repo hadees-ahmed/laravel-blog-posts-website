@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use function Composer\Autoload\includeFile;
 
@@ -28,6 +29,20 @@ class Post extends Model
             // if title was changed
             if (isset($post->getDirty()['title'])) {
                 $post->slug = Str::slug($post->title . ' ' . random_int(1, 10000));
+            }
+
+            /** This condition is used to
+                store the post thumbnail and save its path
+                to the database to display the thumbnail along
+                the posts where required
+             */
+            if (request()->hasFile('thumbnail')) {
+                $post->thumbnail = request()->file('thumbnail')->store('thumbnails');
+            }
+        });
+        static::deleting(function ($post) {
+            if ($post->thumbnail) {
+                Storage::delete($post->thumbnail);
             }
         });
     }

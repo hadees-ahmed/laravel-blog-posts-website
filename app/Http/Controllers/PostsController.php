@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PostsController extends Controller
@@ -45,7 +46,6 @@ class PostsController extends Controller
             'selectedCategory' => $selectedCategory,
             'user' => $user,
         ]);
-
     }
 
     public function create()
@@ -53,7 +53,6 @@ class PostsController extends Controller
         $categories = Category::all(['id','name']);
 
         return view('users.posts.create', compact('categories'));
-
     }
 
     public function edit(Post $post)
@@ -80,7 +79,7 @@ class PostsController extends Controller
         return redirect()->back();
     }
 
-    private function save(array $attributes, Post $post)
+    private function  save(array $attributes, Post $post)
     {
         // condition to check the user if user edit the post
         // and save as draft
@@ -88,10 +87,6 @@ class PostsController extends Controller
             $attributes['published_at'] = null;
         } else {
             $attributes['published_at'] = now();
-        }
-
-        if (isset($attributes['thumbnail'])){
-            $attributes['thumbnail'] = \request()->file('thumbnail')->store('thumbnails');
         }
 
         $post->fill($attributes)->save();
