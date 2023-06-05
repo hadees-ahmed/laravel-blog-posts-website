@@ -23,9 +23,9 @@ class StoreUserRequest extends FormRequest
     public function rules(): array
     {
             return [
-                'name' => 'nullable|max:100',
+                'name' => 'required|max:100',
                 'email' => [
-                    'nullable',
+                    'required',
                     'email',
                     'max:150',
                     $this->request->get('user_id') == null
