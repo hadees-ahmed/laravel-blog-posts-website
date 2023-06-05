@@ -29,7 +29,8 @@ class UserController extends Controller
 
     public function update(StoreUserRequest $request)
     {
-        $attributes = array_filter($request->validated());
+        $attributes = $request->validated();
+
         $user = auth()->user();
 
         if ($request->get('user_id')){

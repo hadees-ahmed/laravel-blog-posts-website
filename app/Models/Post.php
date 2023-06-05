@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use function Composer\Autoload\includeFile;
 
 class Post extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'slug', 'excerpt', 'body', 'category_id', 'published_at'];
+    protected $fillable = ['title', 'slug', 'excerpt', 'body', 'category_id', 'published_at', 'thumbnail'];
 // search query
 
     public static function booted()
@@ -28,6 +29,21 @@ class Post extends Model
             // if title was changed
             if (isset($post->getDirty()['title'])) {
                 $post->slug = Str::slug($post->title . ' ' . random_int(1, 10000));
+            }
+
+            /** This condition is used to
+                store the post thumbnail and save its path
+                to the database to display the thumbnail along
+                the posts where required
+             */
+
+            if (request()->hasFile('thumbnail')) {
+                $post->thumbnail = request()->file('thumbnail')->store('thumbnails');
+            }
+        });
+        static::deleting(function ($post) {
+            if ($post->thumbnail) {
+                Storage::delete($post->thumbnail);
             }
         });
     }
@@ -48,6 +64,15 @@ class Post extends Model
     public function scopePublished($query)
     {
         $query-> whereNotNull('published_at');
+    }
+    public function getThumbnail()
+    {
+        if ($this->thumbnail){
+            return Storage::url($this->thumbnail);
+        } else {
+            return asset('/images/illustration-3.png');
+        }
+
     }
 
     public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo

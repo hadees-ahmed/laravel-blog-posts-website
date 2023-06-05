@@ -16,7 +16,8 @@ class Category extends Model
             $builder->oldest('name');
         });
     }
-public function posts(){
-    return $this->hasMany(Post::class);
-}
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }
