@@ -34,8 +34,6 @@ class SessionsController extends Controller
 /***Alternative way
        return back()->withInput()->withErrors(['email'=> 'The Provided email or password is incorrect']);
 ***/
-
-
     }
 
 }
