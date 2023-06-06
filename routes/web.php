@@ -20,127 +20,113 @@ use App\Http\Controllers\PostsController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-// to display all the users
-Route::get('users', [UserController::class, 'index'])
-    ->middleware('isAdmin','auth')
-    ->name('users.index');
 
-// display all posts
-Route::get('posts',[PostsController::class,'index'])
-    ->middleware('auth')
-    ->name('posts');
+// Authentication routes
+Route::middleware('guest')->group(function () {
+    // Login page view
+    Route::get('login', [SessionsController::class, 'create'])
+        ->name('login');
 
-// categories
-// displays all posts ->  no category_Id check
-// or filters by category -> category_Id check
-// to display user posts
-Route::get('users/{user?}/posts', [PostsController::class, 'index'])
-    ->middleware('auth')
-    ->name('users.posts.index');
+    // Login
+    Route::post('login', [SessionsController::class, 'login']);
 
-//new user registration page
-Route::get('register',[RegistrationController::class, 'create'])
-    ->middleware('guest')
-    ->name('register');
+});
 
-// store new user in database
-Route::post('register',[RegistrationController::class, 'store'])
-    ->middleware('guest')
-    ->name('register');
+// Registration routes
+Route::middleware('guest')->group(function () {
+    // New user registration page
+    Route::get('register', [RegistrationController::class, 'create'])
+        ->name('register');
 
-//logout the user
-Route::post('logout',[SessionsController::class,'logout'])
-    ->middleware('auth')
-    ->name('logout');
-
-//login page view
-Route::get('login',[SessionsController::class, 'create'])
-    ->middleware('guest')
-    ->name('login');
-
-//login
-Route::post('login',[SessionsController::class, 'login'])
-    ->middleware('guest')
-    ->name('login');
-
-// to edit other users from admin login
-Route::get('{user?}/update',[UserController::class,'edit'])
-    ->middleware('isAdmin','auth')
-    ->name('admin.users.update');
-
-// edit profile route
-Route::get('update',[UserController::class,'edit'])
-    ->middleware('auth')
-    ->name('users.update');
-
-// save updated profile details
-Route::post('update',[UserController::class,'update'])
-    ->middleware('auth')
-    ->name('users.update');
-
-// to delete the user from blog (admins only)
-Route::get('{user}/delete',[UserController::class,'destroy'])
-    ->middleware('auth','isAdmin')
-    ->name('users.delete');
-
-//show comments and add comment
-Route::get('posts/{post}/comments',[CommentsController::class,'index'])
-    ->middleware('auth')
-    ->name('posts.comments.index');
-
-// store comment
-Route::post('users/{user}/{post}/comments',[CommentsController::class , 'store'])
-    ->middleware('auth')
-    ->name('users.comments');
-
-// delete comment
-Route::get('comments/{comment}/delete',[CommentsController::class,'destroy'])
-    ->middleware('auth')
-    ->can('delete', 'comment')
-    ->name('comments.delete');
-
-//create post
-Route::get('posts/create',[PostsController::class,'create'])
-    ->middleware('auth')
-    ->name('posts.create');
-
-//edit post
-Route::get('posts/{post}/edit',[PostsController::class,'edit'])
-    ->middleware('auth')
-    ->can('update', 'post')
-    ->name('posts.edit');
-
-//Store created post
-Route::post('posts',[PostsController::class,'store'])
-    ->middleware('auth')
-    ->name('posts.store');
-
-//update edited post
-Route::post('posts/{post}',[PostsController::class, 'update'])
-    ->middleware('auth')
-    ->name('posts.update')
-    ->can('update', 'post');
-
-//delete post
-Route::get('posts/{post}/delete',[PostsController::class,'delete'])
-    ->middleware('auth')
-    ->name('posts.delete')
-    ->can('delete', 'post');
-
-// view drafts
-Route::get('users/drafts',[\App\Http\Controllers\PostsDraftsController::class, 'index'])
-    ->middleware('auth')
-    ->name('users.drafts');
+    // Store new user in the database
+    Route::post('register', [RegistrationController::class, 'store'])
+        ->name('register');
+});
 
 
+// User Controller routes
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    // Display all the users
+    Route::get('users', [UserController::class, 'index'])
+        ->name('users.index');
+
+    // Edit other users from admin login
+    Route::get('{user?}/update', [UserController::class, 'edit'])
+        ->name('admin.users.update');
+
+    // Delete the user from blog (admins only)
+    Route::get('{user}/delete', [UserController::class, 'destroy'])
+        ->name('users.delete');
+});
 
 
+Route::middleware('auth')->group(function () {
+    // Delete comment
+    Route::get('comments/{comment}/delete', [CommentsController::class, 'destroy'])
+        ->can('delete', 'comment')
+        ->name('comments.delete');
 
+    // Logout the user
+    Route::post('logout', [SessionsController::class, 'logout'])
+        ->name('logout');
 
+    // Display all posts
+    Route::get('posts', [PostsController::class, 'index'])
+        ->middleware('auth')
+        ->name('posts');
 
+    // Edit profile route
+    Route::get('update', [UserController::class, 'edit'])
+        ->name('users.update');
 
+    // Save updated profile details
+    Route::post('update', [UserController::class, 'update'])
+        ->name('users.update');
 
+    // Categories
+    // Displays all posts -> no category_Id check
+    // or filters by category -> category_Id check
+    // To display user posts
+    Route::get('users/{user?}/posts', [PostsController::class, 'index'])
+        ->name('users.posts.index');
 
+    // Show comments and add comment
+    Route::get('posts/{post}/comments', [CommentsController::class, 'index'])
+        ->name('posts.comments.index');
+
+    // Store comment
+    Route::post('users/{user}/{post}/comments', [CommentsController::class, 'store'])
+        ->name('users.comments');
+
+    // Create post
+    Route::get('posts/create', [PostsController::class, 'create'])
+        ->name('posts.create');
+
+    // Edit post
+    Route::get('posts/{post}/edit', [PostsController::class, 'edit'])
+        ->name('posts.edit');
+
+    // Store created post
+    Route::post('posts', [PostsController::class, 'store'])
+        ->name('posts.store');
+
+    // Update edited post
+    Route::post('posts/{post}', [PostsController::class, 'update'])
+        ->name('posts.update');
+
+    // Delete post
+    Route::get('posts/{post}/delete', [PostsController::class, 'delete'])
+        ->name('posts.delete');
+
+    // View drafts
+    Route::get('users/drafts', [\App\Http\Controllers\PostsDraftsController::class, 'index'])
+        ->name('users.drafts');
+
+    // Restore comment
+    Route::get('comments/{comment}/restore', [CommentsController::class, 'restore'])
+        ->name('comments.restore')
+        ->withTrashed();
+});
 
 
 
