@@ -22,7 +22,7 @@ class PasswordController extends Controller
     {
         $request->validate(['email' => 'required|email|exists:users,email']);
         $user = User::where('email',$request->get('email') )->first();
-        $verification_code = random_int(1000, 9999);
+        $verification_code = random_int(100000, 999999);
 
         Mail::to($user->email)
             ->send(new VerificationCode($user,$verification_code));
@@ -33,7 +33,10 @@ class PasswordController extends Controller
 
     public function enterVerificationCode()
     {
-        return view('verification-code-and-new-password', [
+        if (!session()->get('user') || !session()->get('verification_code')){
+            abort(401);
+        }
+        return view('verification-code.new-password.form', [
             'verification_code'=> session()->get('verification_code'),
             'user' => session()->get('user')
         ]);
@@ -41,20 +44,25 @@ class PasswordController extends Controller
 
     public function verifyCode(Request $request)
     {
-        $request->validate(['code' => 'required|numeric|digits:4' ]);
-
         if ($request->get('code') != session()->get('verification_code')) {
             return redirect()->back()->withErrors(['message' => 'Something went wrong. Please try again.']);
         }
-
+        $request->validate(['code' => 'required|numeric|digits:6' ]);
+        \session()->put('code', $request->get('code'));
         return redirect()->route('enter.new.password');
     }
     public function enterNewPassword()
     {
-        return view('verification-code-and-new-password');
+        if (!session()->get('user') || session()->get('verification_code') != session()->get('code')){
+            abort(401);
+        }
+        return view('verification-code.new-password.form');
     }
     public function update(Request $request)
     {
+        if (!session()->get('user') || session()->get('verification_code') != session()->get('code')){
+            abort(401);
+        }
         $request->validate(['password' =>'required|min:3']);
 
         $user = session()->get('user');
@@ -62,8 +70,10 @@ class PasswordController extends Controller
         // delete data from session
         Session::forget(['verification_code', 'user', 'email']);
 
-        $user->update(['password' => $request->get('password')]);
-        session()->flash('success','Your new password is updated');
+        $passwordUpdated = $user->update(['password' => $request->get('password')]);
+        $passwordUpdated
+            ?session()->flash('success','Your new password is updated')
+            :session()->flash('failed','Something went wrong while updating your password please try again later');
         return redirect('/login');
     }
 }

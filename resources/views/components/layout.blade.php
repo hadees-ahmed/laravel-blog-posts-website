@@ -83,4 +83,11 @@
         </p>
     </div>
 @endif
+@if(session()->has('failed'))
+    <div class="fixed bottom-0 right-0 bg-blue-500 text-white py-2 px-4 rounded-xl mb-2">
+        <p>
+            {{session('failed')}}
+        </p>
+    </div>
+@endif
 </body>
