@@ -9,16 +9,18 @@ use App\Models\User;
 use App\Policies\CommentPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class CommentsController extends Controller
 {
     public function index(Post $post, Request $request)
     {
-    // $request->get('page','1');
-        $page = $request->get('page',1);
-        session()->put('page', $page);
-
-       $comments = cache()->remember('comments' . $post->id . $request->get('page',1),now()->addHour(), function () use($post)
+        /*
+        Remember Cache tags are not supported
+        when using the file, dynamodb, or database
+        cache drivers that's why  we use redis as cache driver to make it work
+         */
+       $comments = Cache::tags('comments')->remember('comments' . $post->id . $request->get('page',1),now()->addHour(), function () use($post)
         {
             return $post->comments()->with('user')->latest()->paginate(2);
         });
@@ -34,25 +36,18 @@ class CommentsController extends Controller
         $attributes = $request->validated();
 
         Comment::create($attributes);
-        $pageCount = ceil($post->comments()->count()/2);
-
-        for($i = 1 ; $i <= $pageCount ; $i++) {
-            cache()->forget('comments' . $post->id . $i );
-        }
+        Cache::tags('comments')->flush();
 
         return redirect('/posts/'. $post->id . '/comments');
     }
     public function destroy( Post $post ,Comment $comment ,Request $request )
     {
-        //both statements are used to call policy
+        /* both statements are used to call policy */
        // $this->authorizeResource(Comment::class, 'comment');
         //$this->authorize('delete', $comment);
-        $pageCount = ceil($post->comments()->count()/2);
 
         $comment->delete();
-        for($i = 1 ; $i <= $pageCount ; $i++) {
-            cache()->forget('comments' . $post->id . $i );
-        }
+        Cache::tags('comments')->flush();
         return redirect()->back();
     }
 }

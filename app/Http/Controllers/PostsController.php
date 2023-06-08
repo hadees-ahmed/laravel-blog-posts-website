@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -43,9 +44,13 @@ class PostsController extends Controller
             $query = $query->where('user_id', $user->id);
             $cacheKey = 'users.posts.' . $categoryId . $search ?? '';
         }
-
-//        cache posts
-        $posts = cache()->remember($cacheKey, now()->addHour(),function () use($query)
+        // cache posts
+        /*
+        Remember Cache tags are not supported
+        when using the file, dynamodb, or database
+        cache drivers that's why  we use redis as cache driver to make it work
+         */
+        $posts = Cache::tags('posts')->remember($cacheKey, now()->addHour(),function () use($query)
         {
             return $query->paginate(5);
         });
@@ -87,11 +92,7 @@ class PostsController extends Controller
     public function delete(Post $post)
     {
         $post->delete();
-        $pageCount = ceil($post->count()/2);
-
-        for($i = 1 ; $i <= $pageCount ; $i++) {
-            cache()->forget('posts' . $i);
-        }
+        Cache::tags('posts')->flush();
 
         return redirect()->back();
     }
@@ -105,16 +106,11 @@ class PostsController extends Controller
         } else {
             $attributes['published_at'] = now();
         }
-        dd($post->count());
 
         //fill works for both update and create
         $post->fill($attributes)->save();
         //clear cache
-        $pageCount = ceil($post->count()/2);
-
-        for($i = 1 ; $i <= $pageCount ; $i++) {
-            cache()->forget('posts' . $i);
-        }
+        Cache::tags('posts')->flush();
         return $attributes['submit'] === 'Save As Draft'
             ? redirect('/users/drafts')
             : redirect('/posts');

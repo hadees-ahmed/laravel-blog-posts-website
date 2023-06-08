@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Category extends Model
 {
@@ -17,9 +18,10 @@ class Category extends Model
         });
     }
 
+    //@todo  learn this parent and columns concept
     public static function all($columns = ['*'])
     {
-        return cache()->rememberForever('categories', function () use ($columns)
+        return Cache::tags('categories')->rememberForever('categories', function () use ($columns)
         {
             return parent::all($columns);
         });
