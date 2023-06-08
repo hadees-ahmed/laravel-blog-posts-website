@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\PostsDraftsController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\UserController;
@@ -128,11 +130,25 @@ Route::get('posts/{post}/delete',[PostsController::class,'delete'])
     ->can('delete', 'post');
 
 // view drafts
-Route::get('users/drafts',[\App\Http\Controllers\PostsDraftsController::class, 'index'])
+Route::get('users/drafts',[PostsDraftsController::class, 'index'])
     ->middleware('auth')
     ->name('users.drafts');
 
+Route::get('forgot-password',[PasswordController::class,'create'])
+    ->name('forgot.password');
 
+Route::post('verification-code', [PasswordController::class, 'sendVerificationCode'])
+    ->name('verification.code');
+
+Route::get('verification-code', [PasswordController::class, 'enterVerificationCode'])
+    ->name('verification.code.enter');
+
+Route::post('verify-code', [PasswordController::class, 'verifyCode'])
+    ->name('verify.code');
+
+Route::post('update',[PasswordController::class,'update'])->name('update.password');
+
+Route::get('/new-password',[PasswordController::class, 'enterNewPassword'])->name('enter.new.password');
 
 
 
