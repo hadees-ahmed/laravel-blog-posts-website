@@ -14,11 +14,11 @@ class PostsDraftsController extends Controller
             ->drafts()
             ->latest()
             ->paginate();
-
-        $categories =  Category::all(['id','name']);
+        $categories = new Category();
+        $categories =  $categories->all();
 
         // looping through posts to set manual relationships for user & category
-        // we are doing this so we dont have to make additional queries
+        // we are doing this so we do not have to make additional queries
 
         // because we have paginated items we cant use a simple loop & have to use this
         $posts = tap($posts, function($paginatedInstance) use ($categories) {

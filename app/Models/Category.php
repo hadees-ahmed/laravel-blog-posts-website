@@ -16,8 +16,17 @@ class Category extends Model
             $builder->oldest('name');
         });
     }
+
+    public static function all($columns = ['*'])
+    {
+        return cache()->rememberForever('categories', function () use ($columns)
+        {
+            return parent::all($columns);
+        });
+    }
     public function posts()
     {
         return $this->hasMany(Post::class);
     }
+
 }

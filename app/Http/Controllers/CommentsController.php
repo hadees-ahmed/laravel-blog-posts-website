@@ -12,9 +12,16 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
-    public function index(Post $post)
+    public function index(Post $post, Request $request)
     {
-        $comments = $post->comments()->with('user')->latest()->paginate(5);
+    // $request->get('page','1');
+        $page = $request->get('page',1);
+        session()->put('page', $page);
+
+       $comments = cache()->remember('comments' . $post->id . $request->get('page',1),now()->addHour(), function () use($post)
+        {
+            return $post->comments()->with('user')->latest()->paginate(2);
+        });
 
         return view('comments.index', [
             'comments' => $comments,
@@ -27,17 +34,25 @@ class CommentsController extends Controller
         $attributes = $request->validated();
 
         Comment::create($attributes);
+        $pageCount = ceil($post->comments()->count()/2);
+
+        for($i = 1 ; $i <= $pageCount ; $i++) {
+            cache()->forget('comments' . $post->id . $i );
+        }
 
         return redirect('/posts/'. $post->id . '/comments');
     }
-    public function destroy(Comment $comment)
+    public function destroy( Post $post ,Comment $comment ,Request $request )
     {
         //both statements are used to call policy
        // $this->authorizeResource(Comment::class, 'comment');
         //$this->authorize('delete', $comment);
+        $pageCount = ceil($post->comments()->count()/2);
 
         $comment->delete();
-
+        for($i = 1 ; $i <= $pageCount ; $i++) {
+            cache()->forget('comments' . $post->id . $i );
+        }
         return redirect()->back();
     }
 }

@@ -48,23 +48,22 @@ class Post extends Model
         });
     }
 
-    public function scopeSearch($query, array $array)
+    public function scopeSearch($query, string $search)
     {
-        if ($array['search'] ?? false) {
-            $query
-                ->where('title', 'like', '%' . $array['search'] . '%')
-                ->orwhere('body', 'like', '%' . $array['search'] . '%');
-        }
+        $query->where('title', 'like', '%' . $search . '%')
+                ->orwhere('body', 'like', '%' . $search . '%');
     }
 
     public function scopeDrafts($query)
     {
         $query-> whereNull('published_at');
     }
+
     public function scopePublished($query)
     {
         $query-> whereNotNull('published_at');
     }
+
     public function getThumbnail()
     {
         if ($this->thumbnail){
@@ -72,17 +71,18 @@ class Post extends Model
         } else {
             return asset('/images/illustration-3.png');
         }
-
     }
 
     public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Category::class);// if I of id will be small then do not need to specify foreignKey It will auto render
     }
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
     //@todo learn
     public function getPublishedAtAttribute($value)
     {
@@ -92,6 +92,7 @@ class Post extends Model
 
         return null;
     }
+
     public function comments()
     {
         return $this->hasMany(Comment::class,'post_id');

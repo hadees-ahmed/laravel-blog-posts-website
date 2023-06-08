@@ -94,7 +94,7 @@ Route::post('users/{user}/{post}/comments',[CommentsController::class , 'store']
     ->name('users.comments');
 
 // delete comment
-Route::get('comments/{comment}/delete',[CommentsController::class,'destroy'])
+Route::get('/posts/{post}/comments/{comment}/delete',[CommentsController::class,'destroy'])
     ->middleware('auth')
     ->can('delete', 'comment')
     ->name('comments.delete');

@@ -14,14 +14,14 @@ class UserController extends Controller
 {
     public function index()
     {
-        return view('users', [
-            'users'=> User::all()
-        ]);
+        $users = cache()->remember('users',now()->addHour(), function ()
+        {
+            return User::all();
+        });
+        return view('users', compact('users'));
     }
     public function edit(User $user = null)
     {
-
-
         return view('edit',[
             'user'=> $user
         ]);
@@ -36,6 +36,8 @@ class UserController extends Controller
         if ($request->get('user_id')){
             $this->authorize('before', $user);
             User::where('id',$request->get('user_id'))->update($attributes);
+            //clear cache
+            cache()->forget('users');
             return redirect('/users');
         } else {
 
@@ -49,6 +51,7 @@ class UserController extends Controller
             */
 
             auth()->user()->update($attributes);
+            cache()->forget('users');
             return redirect('/posts');
         }
     }
@@ -57,7 +60,9 @@ class UserController extends Controller
         $user->posts()->delete();
 
         $user->delete();
-
+        //clear cache
+        cache()->forget('users');
+        cache()->forget('posts',);
         return redirect('users');
     }
 }

@@ -7,7 +7,7 @@
                 <a href="/users/{{$comment->user->id}}/posts"><h5 class="font-bold">{{$comment->user?->name }}</h5></a>
 
                     @can('delete', $comment)
-                        <a href="{{route('comments.delete',['comment' => $comment->id])}}" class="text-red-500">Delete Comment</a>
+                        <a href="{{route('comments.delete',['comment' => $comment->id, 'post' => $post])}}" class="text-red-500">Delete Comment</a>
                     @endcan
                 <p class="text-blue-500">{{$comment->comments}}</p>
                 <div class="mt-2 block text-gray-400 text-xs">
