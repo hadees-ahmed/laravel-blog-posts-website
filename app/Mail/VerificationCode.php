@@ -3,25 +3,26 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SignUp extends Mailable implements ShouldQueue
+class VerificationCode extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
-
-     public $user;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($user)
+    public $user;
+    public $verification_code;
+    public function __construct($user,$verification_code)
     {
         $this->user = $user;
+        $this->verification_code = $verification_code;
     }
 
     /**
@@ -30,8 +31,8 @@ class SignUp extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('hadeesahmed@yahoo.com', 'Hadees Ahmed'),
-            subject: 'Registration Successful',
+            from: new Address('hadeesahmed@yahoo.com', 'Verification Team'),
+            subject: 'Verification Code',
         );
     }
 
@@ -41,7 +42,7 @@ class SignUp extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'signup-message',
+            view: 'verification-code-message',
         );
     }
 
