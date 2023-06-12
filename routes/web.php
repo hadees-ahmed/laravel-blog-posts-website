@@ -100,6 +100,12 @@ Route::get('posts/{post}/comments', [CommentsController::class, 'index'])
 Route::post('users/{user}/{post}/comments', [CommentsController::class, 'store'])
     ->name('users.comments');
 
+
+// Delete comment
+Route::get('/posts/{post}/comments/{comment}/delete',[CommentsController::class,'destroy'])
+    ->can('delete', 'comment')
+    ->name('comments.delete');
+
 // Create post
 Route::get('posts/create', [PostsController::class, 'create'])
     ->name('posts.create');
