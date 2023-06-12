@@ -8,13 +8,16 @@ use App\Models\Post;
 use App\Models\User;
 use App\Policies\CommentPolicy;
 use Illuminate\Http\Request;
+use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 
 class CommentsController extends Controller
 {
     public function index(Post $post, Request $request)
     {
+
         /*
         Remember Cache tags are not supported
         when using the file, dynamodb, or database
@@ -31,7 +34,7 @@ class CommentsController extends Controller
         ]);
     }
 
-    public function store(User $user , Post $post, StoreCommentRequest $request)
+    public function store(User $user, Post $post, StoreCommentRequest $request)
     {
         $attributes = $request->validated();
 
@@ -47,7 +50,15 @@ class CommentsController extends Controller
         //$this->authorize('delete', $comment);
 
         $comment->delete();
+
         Cache::tags('comments')->flush();
+
         return redirect()->back();
     }
+    public function restore(Comment $comment)
+    {
+        $comment->restore();
+        return back();
+    }
+
 }
