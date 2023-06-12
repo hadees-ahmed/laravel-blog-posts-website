@@ -7,9 +7,18 @@
                 <a href="/users/{{$comment->user->id}}/posts"><h5 class="font-bold">{{$comment->user?->name }}</h5></a>
 
                     @can('delete', $comment)
+                        @if(!$comment->trashed())
                         <a href="{{route('comments.delete',['comment' => $comment->id])}}" class="text-red-500">Delete Comment</a>
+                       @endif
                     @endcan
-                <p class="text-blue-500">{{$comment->comments}}</p>
+                @if ($comment->trashed())
+                    <p class="text-blue-500">{{'Comment Deleted'}}</p>
+                @can('undo', $comment)
+                    <a href="{{route('comments.restore', ['comment' => $comment->id])}}" class="text-green-500">{{'undo'}}</a>
+                    @endif
+                @else
+                    <p class="text-blue-500">{{$comment->comments}}</p>
+                @endif
                 <div class="mt-2 block text-gray-400 text-xs">
                     <time>{{$comment->created_at->diffForHumans()}}</time>
                 </div>
