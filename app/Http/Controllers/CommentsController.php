@@ -58,10 +58,8 @@ class CommentsController extends Controller
     public function restore(Comment $comment)
     {
         $comment->restore();
-
         Cache::tags('comments')->flush();
         Cache::tags('posts')->flush();
         return back();
     }
-
 }
