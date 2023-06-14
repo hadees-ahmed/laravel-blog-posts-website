@@ -4,9 +4,16 @@
             <a href="{{route('admin.users.update',['user' => $user->id])}}"
                class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 rounded-full py-2 px-8 pl-9"
             >Edit</a>
+
         <a href="{{route('users.delete',['user' => $user->id])}}"
            class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 rounded-full py-2 px-8 pl-9"
-        >Delete</a> <br>
+        >Delete</a>
+        @if(!$user->is_Admin)
+        <a href="{{route('users.promote',['user' => $user->id])}}"
+           class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 rounded-full py-2 px-8 pl-9"
+        >Make Admin</a> <br>
+
+        @endif
 
 @endforeach
 </x-layout>

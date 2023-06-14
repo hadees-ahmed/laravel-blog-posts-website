@@ -65,4 +65,13 @@ class UserController extends Controller
         cache()->forget('posts',);
         return redirect('users');
     }
+    public function promote(User $user)
+    {
+        $user->is_Admin = true;
+        $user->save();
+
+        cache()->forget('users');
+        return redirect()->back();
+    }
+
 }
