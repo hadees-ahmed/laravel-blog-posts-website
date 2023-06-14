@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CodeGenerator;
 use App\Mail\SignUp;
 use App\Mail\VerificationCode;
 use App\Models\User;
@@ -18,11 +19,12 @@ class PasswordController extends Controller
       return view('recover-password');
     }
 
-    public function sendVerificationCode(Request $request)
+    public function sendVerificationCode(Request $request, CodeGenerator $passwordGenerator)
     {
         $request->validate(['email' => 'required|email|exists:users,email']);
         $user = User::where('email',$request->get('email') )->first();
-        $verification_code = random_int(100000, 999999);
+
+        $verification_code = $passwordGenerator->handle();
 
         Mail::to($user->email)
             ->send(new VerificationCode($user,$verification_code));

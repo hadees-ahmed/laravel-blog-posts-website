@@ -22,8 +22,8 @@ class PostFactory extends Factory
         $categoryId = Category::inRandomOrder()->value('id');
 
         return [
-            'category_id' => $categoryId,
-            'user_id' => $userId,
+            'category_id' => Category::factory(),
+            'user_id' => User::factory(),
             'title' => $this->faker->sentence,
             'excerpt' => $this->faker->sentence,
             'body' => $this->faker->paragraph,

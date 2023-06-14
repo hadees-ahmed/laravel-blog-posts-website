@@ -25,7 +25,7 @@ class CommentsController extends Controller
          */
        $comments = Cache::tags('comments')->remember('comments' . $post->id . $request->get('page',1),now()->addHour(), function () use($post)
         {
-            return $post->comments()->with('user')->latest()->paginate(2);
+            return $post->comments()->withTrashed()->with('user')->latest()->paginate(2);
         });
 
         return view('comments.index', [
@@ -40,24 +40,27 @@ class CommentsController extends Controller
 
         Comment::create($attributes);
         Cache::tags('comments')->flush();
-
+        Cache::tags('posts')->flush();
         return redirect('/posts/'. $post->id . '/comments');
     }
-    public function destroy( Post $post ,Comment $comment ,Request $request )
+    public function destroy(Comment $comment)
     {
         /* both statements are used to call policy */
-       // $this->authorizeResource(Comment::class, 'comment');
+       //$this->authorizeResource(Comment::class, 'comment');
         //$this->authorize('delete', $comment);
 
         $comment->delete();
 
         Cache::tags('comments')->flush();
-
+        Cache::tags('posts')->flush();
         return redirect()->back();
     }
     public function restore(Comment $comment)
     {
         $comment->restore();
+
+        Cache::tags('comments')->flush();
+        Cache::tags('posts')->flush();
         return back();
     }
 

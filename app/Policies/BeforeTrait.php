@@ -8,5 +8,4 @@ trait BeforeTrait
     {
         return $user->is_Admin ? true : null;
     }
-
 }
