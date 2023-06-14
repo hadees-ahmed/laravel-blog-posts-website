@@ -102,9 +102,9 @@ Route::post('users/{user}/{post}/comments', [CommentsController::class, 'store']
 
 
 // Delete comment
-Route::get('/posts/{post}/comments/{comment}/delete',[CommentsController::class,'destroy'])
-    ->can('delete', 'comment')
-    ->name('comments.delete');
+//Route::get('/posts/{post}/comments/{comment}/delete',[CommentsController::class,'destroy'])
+//    ->can('delete', 'comment')
+//    ->name('comments.delete');
 
 // Create post
 Route::get('posts/create', [PostsController::class, 'create'])
@@ -137,7 +137,7 @@ Route::get('users/drafts', [\App\Http\Controllers\PostsDraftsController::class, 
 
 // Restore comment
 Route::get('comments/{comment}/restore', [CommentsController::class, 'restore'])
-    ->name('comments.restore')
+    ->name('comments.restore')->can('undo', 'comment')
     ->withTrashed();
 
 // enter email
