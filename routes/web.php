@@ -86,6 +86,10 @@ Route::middleware('guest')->group(function () {
     //promote admin
     Route::get('users/{user}/promote',[UserController::class, 'promote'])
         ->name('users.promote');
+
+    Route::get('users/{user}/demote',[UserController::class, 'demote'])
+        ->name('users.demote');
+
 });
 
 
@@ -160,5 +164,6 @@ Route::middleware('auth')->group(function () {
     Route::get('comments/{comment}/restore', [CommentsController::class, 'restore'])
         ->name('comments.restore')->can('undo', 'comment')
         ->withTrashed();
+});
 
 

@@ -22,7 +22,7 @@ class UserController extends Controller
     }
     public function edit(User $user = null)
     {
-        return view('edit',[
+        return view('edit', [
             'user'=> $user
         ]);
     }
@@ -58,16 +58,27 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->posts()->delete();
+        $user->comments()->delete();
 
         $user->delete();
         //clear cache
         cache()->forget('users');
-        cache()->forget('posts',);
+        cache()->forget('posts');
+        cache()->forget('comments');
         return redirect('users');
     }
     public function promote(User $user)
     {
         $user->is_Admin = true;
+        $user->save();
+
+        cache()->forget('users');
+        return redirect()->back();
+    }
+
+    public function demote(User $user)
+    {
+        $user->is_Admin = false;
         $user->save();
 
         cache()->forget('users');
