@@ -18,12 +18,16 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
-        $userId = User::inRandomOrder()->value('id');
-        $categoryId = Category::inRandomOrder()->value('id');
+//        $userId = User::inRandomOrder()->value('id');
+//        $categoryId = Category::inRandomOrder()->value('id');
 
         return [
-            'category_id' => Category::factory(),
-            'user_id' => User::factory(),
+            'category_id' => function() {
+                return Category::factory()->create();
+            },
+            'user_id' => function() {
+                return User::factory()->create();
+            },
             'title' => $this->faker->sentence,
             'excerpt' => $this->faker->sentence,
             'body' => $this->faker->paragraph,

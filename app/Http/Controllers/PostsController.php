@@ -101,9 +101,14 @@ class PostsController extends Controller
     {
         // condition to check the user if user edit the post
         // and save as draft
+
         if ($attributes['submit'] === 'Save As Draft') {
             $attributes['published_at'] = null;
         } else {
+            if (auth()->user()->is_banned){
+                session()->flash('ban','You cannot perform this action because you are banned');
+                return redirect()->back();
+            }
             $attributes['published_at'] = now();
         }
 

@@ -85,13 +85,17 @@ Route::middleware('guest')->group(function () {
 
     //promote admin
     Route::get('users/{user}/promote',[UserController::class, 'promote'])
-        ->name('users.promote');
+        ->name('users.promote')->can('promoteOrDemote', 'user');
 
     Route::get('users/{user}/demote',[UserController::class, 'demote'])
-        ->name('users.demote');
+        ->name('users.demote')->can('promoteOrDemote', 'user');
 
+    Route::get('users/{user}/ban',[UserController::class, 'ban' ])
+        ->name('users.ban')->can('banOrUnban' , 'user');
+
+    Route::get('users/{user}/unban',[UserController::class, 'unban' ])
+        ->name('users.unban')->can('banOrUnban', 'user');
 });
-
 
 Route::middleware('auth')->group(function () {
     // Delete comment

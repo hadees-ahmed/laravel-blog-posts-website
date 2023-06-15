@@ -90,4 +90,11 @@
         </p>
     </div>
 @endif
+@if(session()->has('ban'))
+    <div class="fixed bottom-0 right-0 bg-red-500 text-white py-2 px-4 rounded-xl mb-2">
+        <p>
+            {{session('ban')}}
+        </p>
+    </div>
+@endif
 </body>

@@ -20,8 +20,12 @@ class CommentFactory extends Factory
     {
         return [
             'comments' => $this->faker->sentence,
-            'user_id' => User::factory()->create(),
-            'post_id' => Post::factory()->create(),
+            'user_id' => function() {
+                return User::factory()->create();
+            },
+            'post_id' => function() {
+                return Post::factory()->create();
+            },
         ];
     }
 }
