@@ -90,6 +90,12 @@ Route::middleware('guest')->group(function () {
     Route::get('users/{user}/demote',[UserController::class, 'demote'])
         ->name('users.demote');
 
+    Route::get('users/{user}/ban',[UserController::class, 'ban' ])
+        ->name('users.ban');
+
+    Route::get('users/{user}/unban',[UserController::class, 'unban' ])
+        ->name('users.unban');
+
 });
 
 

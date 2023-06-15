@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use SebastianBergmann\Type\TrueType;
 
 class UserController extends Controller
 {
@@ -85,4 +86,21 @@ class UserController extends Controller
         return redirect()->back();
     }
 
+    public function ban(User $user)
+    {
+        $user->is_banned = true;
+        $user->save();
+
+        cache()->forget('users');
+        return redirect()->back();
+    }
+
+    public function unban(User $user)
+    {
+        $user->is_banned = false;
+        $user->save();
+
+        cache()->forget('users');
+        return redirect()->back();
+    }
 }
