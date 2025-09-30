@@ -6,6 +6,7 @@ namespace App\Providers;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
+use App\Policies\BanPolicy;
 use App\Policies\CommentPolicy;
 use App\Policies\PostPolicy;
 use App\Policies\UserPolicy;

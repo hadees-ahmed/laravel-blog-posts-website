@@ -36,6 +36,11 @@ class CommentsController extends Controller
 
     public function store(User $user, Post $post, StoreCommentRequest $request)
     {
+        if (auth()->user()->is_banned){
+            session()->flash('ban','You cannot perform this action because you are banned');
+            return redirect()->back();
+        }
+
         $attributes = $request->validated();
 
         Comment::create($attributes);
